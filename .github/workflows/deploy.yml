@@ -8,9 +8,6 @@ jobs:
   deploy:
     name: Deploy correct_exams function
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: lambda/correct_exams
 
     steps:
       - name: Checkout code
@@ -18,12 +15,13 @@ jobs:
 
       - name: Zip Lambda function
         run: zip -r function.zip .
+        working-directory: lambda/correct_exams
 
       - name: Deploy to AWS Lambda
         uses: appleboy/lambda-action@master
         with:
           aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          function_name: correct_exams
-          zip_file: function.zip
           aws_region: eu-west-1
+          function_name: correct_exams
+          zip_file: lambda/correct_exams/function.zip
